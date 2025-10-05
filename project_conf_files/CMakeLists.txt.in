@@ -1,0 +1,28 @@
+cmake_minimum_required(VERSION 3.5)
+project(TPL_PROJECT_NAME C CXX)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+#Notification module
+add_subdirectory(qml-notify-module)
+
+# Install QML APP
+install(DIRECTORY app/ DESTINATION ${CMAKE_INSTALL_PREFIX}/app/)
+
+# Install main project files
+install(FILES TPL_PROJECT_NAME.apparmor DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(FILES TPL_PROJECT_NAME.desktop DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(FILES manifest.json DESTINATION ${CMAKE_INSTALL_PREFIX})
+
+#Icon
+install(FILES icon.png DESTINATION ${CMAKE_INSTALL_PREFIX})
+
+#SPECIFIC FILES FOR NOTIFICATIONS
+install(PROGRAMS pushexec DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(FILES TPL_PROJECT_NAME-push-helper.json DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(FILES TPL_PROJECT_NAME-push.apparmor DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(FILES push-apparmor.json DESTINATION ${CMAKE_INSTALL_PREFIX})
+
+#OTHER FILES

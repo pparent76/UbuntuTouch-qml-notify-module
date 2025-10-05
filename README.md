@@ -6,6 +6,12 @@ It works with **Qt5** and uses **QDBus**.
 
 ---
 
+## Configure project to use the notifications
+
+./setup-project.sh [PROJECT-PATH]
+
+---
+
 ## Example Usage in QML
 
 Here is a simple example demonstrating how to use the module in a QML file:

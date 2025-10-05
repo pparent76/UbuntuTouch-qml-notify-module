@@ -1,8 +1,8 @@
 # qml-notify-module
 
 This QML module exposes allows to display desktop notifications with haptic feedback from qml
-**It requires the app to be inconfined to work**
-It works with **Qt5** and uses **GLib**, **libnotify**, and **QDBus**.
+**It requires the app to configured properly with configuration files provided to work**
+It works with **Qt5** and uses **QDBus**.
 
 ---
 
@@ -20,10 +20,12 @@ ApplicationWindow {
 
     NotificationHelper {
         id: helper
+        push_app_id:example.orgname_example
     }
 
     Button {
         text: "Show Notification"
-        onClicked: helper.showNotificationMessage("Hello from QML!")
+        onClicked: helper.showNotificationMessage("Hello Title","Hello world from QML!")
     }
 }
+ 

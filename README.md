@@ -38,7 +38,7 @@ ApplicationWindow {
             interval: 5000        // 5 secondes
             repeat: false
             running: false
-            onTriggered: pushNotifier.send("Hello world")
+            onTriggered: helper.send("Hello world")
     }
 
     Button {

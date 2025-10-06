@@ -1,8 +1,12 @@
 # qml-notify-module
 
-This QML module exposes allows to display desktop notifications with haptic feedback from qml
-**It requires the app to configured properly with configuration files provided to work**
-It works with **Qt5** and uses **QDBus**.
+This QML module exposes allows to display Ubuntu Touch notifications locally (without going through a remote push server)
+
+**It requires the project to be configured properly with configuration files provided**, setup-project.sh is here to help with this task.
+
+Local notifications are mainly useful in case where the app is not suspended in background. In order to avoid suspending your app in background use Ubuntu Tweaks app. Note that this will consume more battery, make sure your application is not too CPU-intensive.
+
+**Note:** The Lomiri notifications may not show the notifications of your app if it is in foreground.
 
 ---
 
@@ -29,9 +33,17 @@ ApplicationWindow {
         push_app_id:example.orgname_example
     }
 
+    Timer {
+            id: delayTimer
+            interval: 5000        // 5 secondes
+            repeat: false
+            running: false
+            onTriggered: pushNotifier.send("Hello world")
+    }
+
     Button {
-        text: "Show Notification"
-        onClicked: helper.showNotificationMessage("Hello Title","Hello world from QML!")
+        text: "Show Notification in 5s"
+        onClicked: delayTimer.running = true;
     }
 }
  

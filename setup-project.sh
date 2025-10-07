@@ -197,5 +197,18 @@ else
     
 fi
 
+################################################################################
+#                    SHOW example QML code
+################################################################################
 
+echo ""
+echo "-> You can now add to your QML code:"
+
+echo ""
+echo "    NotificationHelper {"
+echo "       id: helper"
+echo "       push_app_id:$appid_$title"
+echo "    }"
+echo ""
+echo "And call helper.send(\"Hello world\") Where you need it"
 

@@ -37,6 +37,19 @@ write_if_not_present () {
     fi
 }
 
+
+check_if_file_exist () {
+    local file="$1"
+    local defaultRes="$2"    
+    if [ -e "$file" ]; then
+        echo "[WARNING] File allready exists: $file" 
+        return 1;
+    else
+        return $defaultRes
+    fi
+}
+
+
 ################################################################################
 #               Get application id and title
 ################################################################################
@@ -47,7 +60,54 @@ echo ""
 echo "->Geting project informations"
 echo "Configuring project for Application $appid (hook: $title)"
 
+################################################################################
+#               Check for signs of allready installed app
+################################################################################
+exist="0"
 
+check_if_file_exist $folder/$title-push.apparmor $exist; exist=$?;
+check_if_file_exist $folder/$title-push-helper.json $exist; exist=$?;
+check_if_file_exist $folder/push-apparmor.json $exist; exist=$?;
+check_if_file_exist $folder/pushexec $exist; exist=$?;
+check_if_file_exist $folder/qml-notify-module $exist; exist=$?;
+
+if jq -e '.hooks.push' $folder/manifest.json >/dev/null; then
+    echo "[WARNING] 'push' hook already exists in $folder/manifest.json"
+    exist=1
+fi
+
+if [ -e "$folder/CMakeLists.txt" ]; then
+cat $folder/CMakeLists.txt | grep "add_subdirectory(qml-notify-module)" >/dev/null
+    if [ "$?" -eq "0" ]; then
+        echo "[WARNING] qml-notify-module allready present in CMakeLists.txt"
+        exist=1
+    fi
+cat $folder/CMakeLists.txt | grep "$title-push.apparmor" >/dev/null
+    if [ "$?" -eq "0" ]; then
+        echo "[WARNING] $title-push.apparmor allready present in CMakeLists.txt"
+        exist=1
+    fi  
+cat $folder/CMakeLists.txt | grep "$title-push-helper.json" >/dev/null
+    if [ "$?" -eq "0" ]; then
+        echo "[WARNING] $title-push-helper.json allready present in CMakeLists.txt"
+        exist=1
+    fi    
+cat $folder/CMakeLists.txt | grep "push-apparmor.json" >/dev/null
+    if [ "$?" -eq "0" ]; then
+        echo "[WARNING] push-apparmor.json allready present in CMakeLists.txt"
+        exist=1
+    fi  
+cat $folder/CMakeLists.txt | grep "pushexec" >/dev/null
+    if [ "$?" -eq "0" ]; then
+        echo "[WARNING] pushexec allready present in CMakeLists.txt"
+        exist=1
+    fi         
+fi
+
+if [ "$exist" -ne "0" ]; then
+ echo "Project show signs of allready installed module, or push notification system exiting..."
+ exit 1;
+fi
 
 ################################################################################
 #               Copy all the required files
@@ -129,7 +189,7 @@ if [ ! -e "$folder/CMakeLists.txt" ]; then
 else
     echo "Checking cmakefiles"
     
-    for f in icon.png $title-push.apparmor $title-push-helper.json push-apparmor.json do
+    for f in icon.png $title-push.apparmor $title-push-helper.json push-apparmor.json ; do
         write_if_not_present   "install(FILES $f DESTINATION \${CMAKE_INSTALL_PREFIX})" $folder/CMakeLists.txt   
     done
     write_if_not_present   "install(PROGRAMS pushexec DESTINATION ${CMAKE_INSTALL_PREFIX})" $folder/CMakeLists.txt 

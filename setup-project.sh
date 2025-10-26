@@ -205,6 +205,8 @@ echo ""
 echo "-> You can now add to your QML code:"
 
 echo ""
+echo "import Pparent.Notifications 1.0"
+echo ""
 echo "    NotificationHelper {"
 echo "       id: helper"
 echo "       push_app_id:${appid}_$title"

@@ -210,5 +210,5 @@ echo "       id: helper"
 echo "       push_app_id:${appid}_$title"
 echo "    }"
 echo ""
-echo "And call helper.send(\"Hello world\") Where you need it"
+echo "And call helper.showNotificationMessage(\"title\",\"Hello world\") Where you need it"
 
